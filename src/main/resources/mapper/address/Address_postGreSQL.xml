@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="catholic.project.addressManager.address.AddressMapper">
+    <insert id="insert_addr" parameterType="Map">
+        INSERT INTO juso_admin.공통_도로명주소test
+        (
+            구역번호
+        ,시도
+        ,시군구
+        ,읍면
+        ,도로명코드
+        ,도로명
+        ,지하여부
+        ,건물번호본번
+        ,건물번호부번
+        ,건물관리번호
+        ,다량배달처명
+        ,시군구용건물명
+        ,법정동코드
+        ,법정동명
+        ,리
+        ,행정동명
+        ,산여부
+        ,지번본번
+        ,읍면동일련번호
+        ,지번부번
+        ,우편번호
+        ,우편일련번호
+        ,공동주택여부
+        ,도로명주소
+        ,지번주소
+        ,검색용_도로명주소
+        ,검색용_지번주소
+        ,최종변경일시
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.구역번호}
+            ,#{item.시도}
+            ,#{item.시군구}
+            ,#{item.읍면}
+            ,#{item.도로명코드}
+            ,#{item.도로명}
+            ,#{item.지하여부}
+            ,#{item.건물번호본번}
+            ,#{item.건물번호부번}
+            ,#{item.건물관리번호}
+            ,#{item.다량배달처명}
+            ,#{item.시군구용건물명}
+            ,#{item.법정동코드}
+            ,#{item.법정동명}
+            ,#{item.리}
+            ,#{item.행정동명}
+            ,#{item.산여부}
+            ,#{item.지번본번}
+            ,#{item.읍면동일련번호}
+            ,#{item.지번부번}
+            ,#{item.우편번호}
+            ,#{item.우편일련번호}
+            ,#{item.공동주택여부}
+            ,#{item.도로명주소}
+            ,#{item.지번주소}
+            ,#{item.검색용_도로명주소}
+            ,#{item.검색용_지번주소}
+            ,now()
+        )
+        </foreach>
+    </insert>
+
+    <select id="toInsert" resultType="java.lang.Integer">
+        select count(1) from 공통_법정동관리test a
+        where 1=1
+          and a.법정동코드 = #{pk}
+    </select>
+
+    <insert id="insert_bubJung" parameterType="Map">
+        INSERT INTO juso_admin.공통_법정동관리test
+        (
+            시도
+            ,시군구
+            ,법정동명
+            ,법정동코드
+            ,리
+            ,최종변경일시
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.시도}
+            ,#{item.시군구}
+            ,#{item.법정동명}
+            ,#{item.법정동코드}
+            ,#{item.리}
+            ,now()
+        )
+        </foreach>
+    </insert>
+
+    <insert id="insertBubJungCodes" parameterType="catholic.project.addressManager.address.BubVO">
+        INSERT INTO juso_admin.공통_법정동관리test
+        (
+            시도
+            ,시군구
+            ,법정동명
+            ,법정동코드
+            ,리
+            ,최종변경일시
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.시도}
+            ,#{item.시군구}
+            ,#{item.법정동명}
+            ,#{item.법정동코드}
+            ,#{item.리}
+            ,now()
+        )
+        </foreach>
+    </insert>
+
+    <select id="getBubCodeListM" resultType="String">
+        select 법정동코드 from juso_admin.공통_법정동관리m
+    </select>
+
+    <select id="getBubCodeListTest" resultType="String">
+        select 법정동코드 from juso_admin.공통_법정동관리test
+    </select>
+
+    <select id="selectByList" resultType="catholic.project.addressManager.address.BubVO">
+        SELECT
+            시도,
+            시군구,
+            법정동명,
+            법정동코드,
+            리
+        FROM juso_admin.공통_법정동관리m
+        WHERE 법정동코드 IN
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="getDoroCodeListN" resultType="String">
+        select 건물관리번호 from juso_admin.공통_도로명주소n
+    </select>
+
+    <select id="getDoroCodeListTest" resultType="String">
+        select 건물관리번호 from juso_admin.공통_도로명주소test
+    </select>
+
+
+    <select id="selectDoroListByCodeList" resultType="catholic.project.addressManager.address.DoroVO">
+        select
+            구역번호
+             ,시도
+             ,시군구
+             ,읍면
+             ,도로명코드
+             ,도로명
+             ,지하여부
+             ,건물번호본번
+             ,건물번호부번
+             ,건물관리번호
+             ,다량배달처명
+             ,시군구용건물명
+             ,법정동코드
+             ,법정동명
+             ,리
+             ,행정동명
+             ,산여부
+             ,지번본번
+             ,읍면동일련번호
+             ,지번부번
+             ,우편번호
+             ,우편일련번호
+             ,공동주택여부
+             ,도로명주소
+             ,지번주소
+             ,검색용_도로명주소
+             ,검색용_지번주소
+             ,최종변경일시
+        from juso_admin.공통_도로명주소n
+        where 건물관리번호 in
+        <foreach item="item" collection="list" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <insert id="insertDoroData" parameterType="catholic.project.addressManager.address.DoroVO">
+        INSERT INTO 공통_도로명주소test
+        (
+            구역번호
+            ,시도
+            ,시군구
+            ,읍면
+            ,도로명코드
+            ,도로명
+            ,지하여부
+            ,건물번호본번
+            ,건물번호부번
+            ,건물관리번호
+            ,다량배달처명
+            ,시군구용건물명
+            ,법정동코드
+            ,법정동명
+            ,리
+            ,행정동명
+            ,산여부
+            ,지번본번
+            ,읍면동일련번호
+            ,지번부번
+            ,우편번호
+            ,우편일련번호
+            ,공동주택여부
+            ,도로명주소
+            ,지번주소
+            ,검색용_도로명주소
+            ,검색용_지번주소
+            ,최종변경일시
+        )
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+        (
+            #{item.구역번호}
+            ,#{item.시도}
+            ,#{item.시군구}
+            ,#{item.읍면}
+            ,#{item.도로명코드}
+            ,#{item.도로명}
+            ,#{item.지하여부}
+            ,#{item.건물번호본번}
+            ,#{item.건물번호부번}
+            ,#{item.건물관리번호}
+            ,#{item.다량배달처명}
+            ,#{item.시군구용건물명}
+            ,#{item.법정동코드}
+            ,#{item.법정동명}
+            ,#{item.리}
+            ,#{item.행정동명}
+            ,#{item.산여부}
+            ,#{item.지번본번}
+            ,#{item.읍면동일련번호}
+            ,#{item.지번부번}
+            ,#{item.우편번호}
+            ,#{item.우편일련번호}
+            ,#{item.공동주택여부}
+            ,#{item.도로명주소}
+            ,#{item.지번주소}
+            ,#{item.검색용_도로명주소}
+            ,#{item.검색용_지번주소}
+            ,now()
+        )
+        </foreach>
+    </insert>
+
+    <!-- 법정동 일 변동자료 INSERT/UPDATE/DELETE -->
+    <insert id="alter_insert_bubJung" parameterType="Map">
+        INSERT INTO 공통_법정동관리m
+        (
+              시도
+            ,시군구
+            ,법정동명
+            ,법정동코드
+            ,리
+            ,최종변경일시
+        )
+        VALUES
+        (
+              #{시도}
+            ,#{시군구}
+            ,#{법정동명}
+            ,#{법정동코드}
+            ,#{리}
+            ,now()
+        )
+    </insert>
+
+    <update id="alter_update_bubJung" parameterType="Map">
+        UPDATE 공통_법정동관리m
+        SET
+            시도 = #{시도}
+            ,시군구 = #{시군구}
+            ,법정동명 = #{법정동명}
+            ,법정동코드 = #{법정동코드}
+            ,리 = #{리}
+            ,최종변경일시 = now()
+        WHERE 법정동코드 = #{법정동코드}
+    </update>
+
+    <delete id="alter_delete_bubJung" parameterType="Map">
+        delete from 공통_법정동관리m
+        WHERE 법정동코드 = #{법정동코드}
+    </delete>
+
+
+    <!-- 도로명주소 일 변동자료 INSERT/UPDATE/DELETE -->
+    <insert id="alter_insert_addr" parameterType="Map">
+        INSERT INTO 공통_도로명주소n
+        (
+            구역번호
+            ,시도
+            ,시군구
+            ,읍면
+            ,도로명코드
+            ,도로명
+            ,지하여부
+            ,건물번호본번
+            ,건물번호부번
+            ,건물관리번호
+            ,다량배달처명
+            ,시군구용건물명
+            ,법정동코드
+            ,법정동명
+            ,리
+            ,행정동명
+            ,산여부
+            ,지번본번
+            ,읍면동일련번호
+            ,지번부번
+            ,우편번호
+            ,우편일련번호
+            ,공동주택여부
+            ,도로명주소
+            ,지번주소
+            ,검색용_도로명주소
+            ,검색용_지번주소
+            ,최종변경일시
+        )
+        VALUES
+        (
+              #{구역번호}
+            ,#{시도}
+            ,#{시군구}
+            ,#{읍면}
+            ,#{도로명코드}
+            ,#{도로명}
+            ,#{지하여부}
+            ,#{건물번호본번}
+            ,#{건물번호부번}
+            ,#{건물관리번호}
+            ,#{다량배달처명}
+            ,#{시군구용건물명}
+            ,#{법정동코드}
+            ,#{법정동명}
+            ,#{리}
+            ,#{행정동명}
+            ,#{산여부}
+            ,#{지번본번}
+            ,#{읍면동일련번호}
+            ,#{지번부번}
+            ,#{우편번호}
+            ,#{우편일련번호}
+            ,#{공동주택여부}
+            ,#{도로명주소}
+            ,#{지번주소}
+            ,#{검색용_도로명주소}
+            ,#{검색용_지번주소}
+            ,now()
+        )
+    </insert>
+
+    <update id="alter_update_addr" parameterType="Map">
+        UPDATE 공통_도로명주소n
+        SET
+            구역번호 = #{구역번호}
+            ,시도 = #{시도}
+            ,시군구 = #{시군구}
+            ,읍면 = #{읍면}
+            ,도로명코드 = #{도로명코드}
+            ,도로명 = #{도로명}
+            ,지하여부 = #{지하여부}
+            ,시군구용건물명 = #{시군구용건물명}
+            ,법정동코드 = #{법정동코드}
+            ,법정동명 = #{법정동명}
+            ,리 = #{리}
+            ,행정동명 = #{행정동명}
+            ,산여부 = #{산여부}
+            ,지번본번 = #{지번본번}
+            ,읍면동일련번호 = #{읍면동일련번호}
+            ,지번부번 = #{지번부번}
+            ,우편번호 = #{우편번호}
+            ,공동주택여부 = '1'
+            ,도로명주소 = #{도로명주소}
+            ,지번주소 = #{지번주소}
+            ,검색용_도로명주소 = #{검색용_도로명주소}
+            ,검색용_지번주소 = #{검색용_지번주소}
+            ,최종변경일시 = now()
+        WHERE 건물관리번호 = #{건물관리번호}
+    </update>
+
+    <delete id="alter_delete_addr" parameterType="Map">
+        delete from 공통_도로명주소n
+        WHERE 건물관리번호 = #{건물관리번호}
+    </delete>
+
+
+</mapper>
